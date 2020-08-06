@@ -39,21 +39,16 @@ export const TicketsParser = class {
       return `${hours}ч ${min}м`
     }
   
-    getAllDuration(data) {
-      let duration = 0;
-      data.forEach((el) => duration += el.duration);
-      return duration;
-    }
+    getAllDuration = (data) => data.reduce((a, b) => a.duration + b.duration); 
   
-    getStopsTitle(data) {
-      if (data.length === 1) {
+    getStopsTitle({ length }) {
+      switch(length) {
+        case 1:
         return 'пересадка';
-      }
-      if (data.length > 1) {
-        return 'пересадки';
-      }
-      if (data.length === 0) {
+        case 0:
         return 'прямой';
+        default:
+        return 'пересадки';
       }
     }
   
@@ -62,18 +57,16 @@ export const TicketsParser = class {
     }
   
     static parseTickets(data) {
-      if (data.length) {
-        return data.map(TicketsParser.parseTicket);
-      } else {
-        return TicketsParser.parseTicket(data);
-      }
+      return (data.length) 
+         ? data.map(TicketsParser.parseTicket)
+         : TicketsParser.parseTicket(data)
+      
     }
   
     static leadingZero(data) {
-      if (data < 10) {
-        return `0${data}`;
-      }
-      return data;
+      return (data < 10) 
+        ? `0${data}`
+        : data
     }
   };
   
